@@ -8,7 +8,50 @@ import java.util.*
 
 
 private fun solve() {
+    println(countConstruct("bambang", arrayOf("ba", "bamb", "mb", "ang")))
+    println(countConstruct("bambang", arrayOf("ba", "bamb", "mb", "ng")))
+    println(countConstruct("rendy", arrayOf("ren", "dy", "re", "n")))
+    println(countConstruct("eeeeeeeeeeeeeeeeef", arrayOf(
+        "eeee",
+        "eeeeeeee",
+        "eeeeeeeeee",
+        "eeeeeeeeeeeeeee"
+    )))
+}
 
+fun countConstruct(target : String, wordBank: Array<String>, memo: MutableMap<String, Int?> = mutableMapOf()) : Int? {
+    if (target in memo) return memo[target]
+    if (target == "") return 1
+
+    var totalRes : Int = 0
+
+    for (word in wordBank){
+        if (target.indexOf(word) == 0){
+            val suffix = target.slice(word.length until target.length)
+            totalRes += countConstruct(suffix, wordBank, memo) ?: 0
+        }
+    }
+
+    memo[target] = totalRes
+    return totalRes
+}
+
+fun canConstruct(target : String, wordBank : Array<String>, memo : MutableMap<String, Boolean> = mutableMapOf()) : Boolean? {
+    if (target in memo) return memo[target]
+    if (target == "") return true
+
+    for (word in wordBank){
+        if (target.indexOf(word, ignoreCase = true) == 0){
+            val suffix = target.slice(word.length until target.length)
+            if (canConstruct(suffix, wordBank, memo) != null && canConstruct(suffix, wordBank, memo) == true){
+                memo[target] = true
+                return true
+            }
+        }
+    }
+
+    memo[target] = false
+    return false
 }
 
 fun bestSum(targetSum: Int, numbers: IntArray, memo: MutableMap<Int, Array<Int>?> = mutableMapOf()) : Array<Int>? {

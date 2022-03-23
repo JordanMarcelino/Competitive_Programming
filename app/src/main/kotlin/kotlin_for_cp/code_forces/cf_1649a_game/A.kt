@@ -1,6 +1,6 @@
 @file:Suppress("PackageDirectoryMismatch", "MemberVisibilityCanBePrivate")
 
-package kotlin_for_cp
+package kotlin_for_cp.code_forces.cf_1649a_game
 
 /* ------------------ START SUBMISSION ------------------ */
 import java.io.BufferedOutputStream
@@ -11,7 +11,30 @@ import java.util.*
 
 
 private fun solve() {
+    val location = stdin.ints(stdin.int())
+    if (!location.contains(0) || location.size == 2) {
+        println(0)
+        return
+    }
 
+    var f = 0
+    var b = 0
+
+    for (i in location.indices) {
+        if (location[i] != 1) {
+            f = i
+            break
+        }
+    }
+
+    for (i in location.size - 1 downTo 0) {
+        if (location[i] != 1) {
+            b = i
+            break
+        }
+    }
+
+    println(b - f + 2)
 }
 
 
