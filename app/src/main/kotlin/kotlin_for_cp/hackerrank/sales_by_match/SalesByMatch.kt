@@ -1,20 +1,22 @@
 @file:Suppress("PackageDirectoryMismatch", "MemberVisibilityCanBePrivate")
-package kotlin_for_cp.cf_1651a_playoff
+package kotlin_for_cp.hackerrank.sales_by_match
 
 /* ------------------ START SUBMISSION ------------------ */
 import java.io.*
 import java.util.*
-import kotlin.math.pow
+
 
 private fun solve(){
-    val n = 2.0.pow(i.int()).toInt()
-
-    if (n == 2){
-        println("1")
-        return
+    val socks = stdin.ints(stdin.int())
+    val res = mutableMapOf<Int, Int>()
+    socks.forEach {
+        res[it] = res.getOrDefault(it, 0) + 1
     }
-
-    println(n-1)
+    var ans = 0
+    res.forEach { (t, u) ->
+        ans += u/2
+    }
+    println(ans)
 }
 
 
@@ -22,7 +24,7 @@ fun main() {
     setUpIO()
     var tc = 1
     // TODO: no tc input for single test
-    tc = i.int()
+//    tc = stdin.int()
     flush { for (i in 0 until tc) solve() }
 }
 
@@ -108,14 +110,22 @@ private fun merge(arr : MutableList<Int>, left : Int, mid : Int, right : Int){
     }
 }
 
+fun gcd(a: Int, b: Int): Int {
+    return if (a == 0) b else gcd(b % a, a)
+}
+
+fun lcm(a: Int, b: Int): Int {
+    return (a / gcd(a, b)) * b
+}
+
 fun setUpIO() {
-    i = FastIn()
+    stdin = FastIn()
     o = PrintWriter(BufferedOutputStream(OUTPUT), false)
 }
 
 var INPUT: InputStream = System.`in`
 var OUTPUT: PrintStream = System.out
-lateinit var i: FastIn
+lateinit var stdin : FastIn
 lateinit var o: PrintWriter
 inline fun flush(block: PrintWriter.() -> Unit) = o.apply(block).flush()
 class FastIn {

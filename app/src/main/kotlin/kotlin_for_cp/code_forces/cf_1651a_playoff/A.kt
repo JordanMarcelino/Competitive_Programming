@@ -1,16 +1,20 @@
 @file:Suppress("PackageDirectoryMismatch", "MemberVisibilityCanBePrivate")
-package kotlin_for_cp
+package kotlin_for_cp.code_forces.cf_1651a_playoff
 
 /* ------------------ START SUBMISSION ------------------ */
-import java.io.BufferedOutputStream
-import java.io.InputStream
-import java.io.PrintStream
-import java.io.PrintWriter
+import java.io.*
 import java.util.*
-
+import kotlin.math.pow
 
 private fun solve(){
+    val n = 2.0.pow(i.int()).toInt()
 
+    if (n == 2){
+        println("1")
+        return
+    }
+
+    println(n-1)
 }
 
 
@@ -18,7 +22,7 @@ fun main() {
     setUpIO()
     var tc = 1
     // TODO: no tc input for single test
-    tc = stdin.int()
+    tc = i.int()
     flush { for (i in 0 until tc) solve() }
 }
 
@@ -104,22 +108,14 @@ private fun merge(arr : MutableList<Int>, left : Int, mid : Int, right : Int){
     }
 }
 
-fun gcd(a: Int, b: Int): Int {
-    return if (a == 0) b else gcd(b % a, a)
-}
-
-fun lcm(a: Int, b: Int): Int {
-    return a / gcd(a, b) * b
-}
-
 fun setUpIO() {
-    stdin = FastIn()
+    i = FastIn()
     o = PrintWriter(BufferedOutputStream(OUTPUT), false)
 }
 
 var INPUT: InputStream = System.`in`
 var OUTPUT: PrintStream = System.out
-lateinit var stdin: FastIn
+lateinit var i: FastIn
 lateinit var o: PrintWriter
 inline fun flush(block: PrintWriter.() -> Unit) = o.apply(block).flush()
 class FastIn {

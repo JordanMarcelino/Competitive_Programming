@@ -1,16 +1,31 @@
 @file:Suppress("PackageDirectoryMismatch", "MemberVisibilityCanBePrivate")
-package kotlin_for_cp
+package kotlin_for_cp.hackerrank.drawing_book
 
 /* ------------------ START SUBMISSION ------------------ */
-import java.io.BufferedOutputStream
-import java.io.InputStream
-import java.io.PrintStream
-import java.io.PrintWriter
+import java.io.*
 import java.util.*
+import kotlin.math.min
 
 
 private fun solve(){
-
+    val n = stdin.int()
+    val p = stdin.int()
+    val book : MutableList<Pair<Int, Int>> = mutableListOf()
+    var front = 0
+    var back = 0
+    var temp = 0
+    for(i in 0..n/2){
+        book.add(Pair(temp++, temp++))
+    }
+    for (page in book){
+        if(page.first == p || page.second == p) break
+        front++
+    }
+    for (i in book.size - 1 downTo 0){
+        if (book[i].first == p || book[i].second == p) break
+        back++
+    }
+    println(min(front, back))
 }
 
 
@@ -18,7 +33,7 @@ fun main() {
     setUpIO()
     var tc = 1
     // TODO: no tc input for single test
-    tc = stdin.int()
+//    tc = stdin.int()
     flush { for (i in 0 until tc) solve() }
 }
 
@@ -109,7 +124,7 @@ fun gcd(a: Int, b: Int): Int {
 }
 
 fun lcm(a: Int, b: Int): Int {
-    return a / gcd(a, b) * b
+    return (a / gcd(a, b)) * b
 }
 
 fun setUpIO() {
@@ -119,7 +134,7 @@ fun setUpIO() {
 
 var INPUT: InputStream = System.`in`
 var OUTPUT: PrintStream = System.out
-lateinit var stdin: FastIn
+lateinit var stdin : FastIn
 lateinit var o: PrintWriter
 inline fun flush(block: PrintWriter.() -> Unit) = o.apply(block).flush()
 class FastIn {

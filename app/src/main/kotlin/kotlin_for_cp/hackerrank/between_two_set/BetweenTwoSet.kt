@@ -1,16 +1,48 @@
 @file:Suppress("PackageDirectoryMismatch", "MemberVisibilityCanBePrivate")
-package kotlin_for_cp
+package kotlin_for_cp.hackerrank.between_two_set
 
 /* ------------------ START SUBMISSION ------------------ */
-import java.io.BufferedOutputStream
-import java.io.InputStream
-import java.io.PrintStream
-import java.io.PrintWriter
+import java.io.*
 import java.util.*
 
 
 private fun solve(){
+    val n = stdin.int()
+    val m = stdin.int()
 
+    val factor = IntArray(n)
+    val considered = IntArray(m)
+
+    for (i in 0 until n){
+        factor[i] = stdin.int()
+    }
+
+    for (i in 0 until m){
+        considered[i] = stdin.int()
+    }
+
+    mergesort(factor)
+    mergesort(considered)
+
+    var result = 0
+    var temp = lcm(factor[0], factor[1])
+    var correct: Boolean
+    var i = 1
+
+    while (temp <= considered.last()){
+        correct = true
+        considered.forEach {
+            if (it % temp != 0){
+                correct = false
+            }
+        }
+        temp *= ++i
+        if (correct){
+            result++
+        }
+    }
+
+    println(result)
 }
 
 
@@ -18,7 +50,7 @@ fun main() {
     setUpIO()
     var tc = 1
     // TODO: no tc input for single test
-    tc = stdin.int()
+//    tc = stdin.int()
     flush { for (i in 0 until tc) solve() }
 }
 
@@ -109,7 +141,7 @@ fun gcd(a: Int, b: Int): Int {
 }
 
 fun lcm(a: Int, b: Int): Int {
-    return a / gcd(a, b) * b
+    return (a / gcd(a, b)) * b
 }
 
 fun setUpIO() {
@@ -119,7 +151,7 @@ fun setUpIO() {
 
 var INPUT: InputStream = System.`in`
 var OUTPUT: PrintStream = System.out
-lateinit var stdin: FastIn
+lateinit var stdin : FastIn
 lateinit var o: PrintWriter
 inline fun flush(block: PrintWriter.() -> Unit) = o.apply(block).flush()
 class FastIn {

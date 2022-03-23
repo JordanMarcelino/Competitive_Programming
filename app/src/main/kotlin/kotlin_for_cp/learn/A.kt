@@ -1,4 +1,5 @@
 @file:Suppress("PackageDirectoryMismatch", "MemberVisibilityCanBePrivate")
+
 package kotlin_for_cp.learn
 
 /* ------------------ START SUBMISSION ------------------ */
@@ -6,26 +7,86 @@ import java.io.*
 import java.util.*
 
 
-private fun solve(){
+private fun solve() {
 
 }
 
-fun gridTraveller(col : Int, row : Int, memo : MutableMap<String, Long> = mutableMapOf()) : Long {
-    val key = "$col,$row"
-    if(key in memo) memo[key]?.let { return it }
+fun bestSum(targetSum: Int, numbers: IntArray, memo: MutableMap<Int, Array<Int>?> = mutableMapOf()) : Array<Int>? {
+    if (targetSum in memo) return memo[targetSum]
+    if (numbers.isEmpty()) return null
+    if (targetSum == 0) return emptyArray()
+    if (targetSum < 0) return null
 
-    if(col == 0 || row == 0) return 0
+    var shortestArr : Array<Int>? = null
+
+    for (num in numbers){
+        val res = targetSum - num
+        var result = bestSum(res, numbers, memo)
+        result?.let {
+            result = it + arrayOf(num)
+        }
+        if (shortestArr.isNullOrEmpty() || !result.isNullOrEmpty() && result!!.size < shortestArr.size){
+            shortestArr = result
+        }
+    }
+
+    memo[targetSum] = shortestArr
+    return shortestArr
+}
+
+fun howSum(targetSum: Int, numbers: IntArray, memo: MutableMap<Int, Array<Int>?> = mutableMapOf()): Array<Int>? {
+    if (targetSum in memo) return memo[targetSum]
+    if (numbers.isEmpty()) return null
+    if (targetSum == 0) return emptyArray()
+    if (targetSum < 0) return null
+
+    for (num in numbers) {
+        val res = targetSum - num
+        val result = howSum(res, numbers, memo)
+        result?.let {
+            memo[res] =  it + arrayOf(num)
+            return memo[res]
+        }
+    }
+
+    memo[targetSum] = null
+    return memo[targetSum]
+}
+
+fun canSum(targetSum: Int, numbers: IntArray, memo: MutableMap<Int, Boolean> = mutableMapOf()): Boolean {
+    if (targetSum in memo) return memo[targetSum]!!
+    if (numbers.isEmpty()) return false
+    if (targetSum == 0) return true
+    if (targetSum < 0) return false
+
+    for (num in numbers) {
+        val result = targetSum - num
+        if (canSum(result, numbers, memo)) {
+            memo[result] = true
+            return true
+        }
+    }
+
+    memo[targetSum] = false
+    return false
+}
+
+fun gridTraveller(col: Int, row: Int, memo: MutableMap<String, Long> = mutableMapOf()): Long {
+    val key = "$col,$row"
+    if (key in memo) memo[key]?.let { return it }
+
+    if (col == 0 || row == 0) return 0
     if (col == 1 && row == 1) return 1
 
     memo[key] = gridTraveller(col - 1, row, memo) + gridTraveller(col, row - 1, memo)
     return memo[key]!!
 }
 
-fun fib(n : Int, memo : MutableMap<Int, Long> = mutableMapOf()) : Long{
-    if(n in memo) memo[n]?.let { return it }
-    if(n <= 0) return 0
-    if(n == 1) return 1
-    memo[n] = fib(n-1 , memo) + fib(n-2, memo)
+fun fib(n: Int, memo: MutableMap<Int, Long> = mutableMapOf()): Long {
+    if (n in memo) memo[n]?.let { return it }
+    if (n <= 0) return 0
+    if (n == 1) return 1
+    memo[n] = fib(n - 1, memo) + fib(n - 2, memo)
     return memo[n]!!
 }
 
@@ -38,12 +99,12 @@ fun main() {
     flush { for (i in 0 until tc) solve() }
 }
 
-private fun mergesort(arr : IntArray){
+private fun mergesort(arr: IntArray) {
     mergesort(arr, 0, arr.size - 1)
 }
 
-private fun mergesort(arr: IntArray, left : Int, right : Int){
-    if (left < right){
+private fun mergesort(arr: IntArray, left: Int, right: Int) {
+    if (left < right) {
         val mid = (left + right) / 2
         mergesort(arr, left, mid)
         mergesort(arr, mid + 1, right)
@@ -51,7 +112,7 @@ private fun mergesort(arr: IntArray, left : Int, right : Int){
     }
 }
 
-private fun merge(arr : IntArray, left : Int, mid : Int, right : Int){
+private fun merge(arr: IntArray, left: Int, mid: Int, right: Int) {
     val n1 = mid - left + 1
     val n2 = right - mid
 
@@ -62,29 +123,29 @@ private fun merge(arr : IntArray, left : Int, mid : Int, right : Int){
     var j = 0
     var k = left
 
-    while (i < n1 && j < n2){
-        if(leftArr[i] <= rightArr[j]){
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
             arr[k++] = leftArr[i++]
-        }else{
+        } else {
             arr[k++] = rightArr[j++]
         }
     }
 
-    while(i < n1){
+    while (i < n1) {
         arr[k++] = leftArr[i++]
     }
 
-    while(j < n2){
+    while (j < n2) {
         arr[k++] = rightArr[j++]
     }
 }
 
-private fun mergesort(arr : MutableList<Int>){
+private fun mergesort(arr: MutableList<Int>) {
     mergesort(arr, 0, arr.size - 1)
 }
 
-private fun mergesort(arr: MutableList<Int>, left : Int, right : Int){
-    if (left < right){
+private fun mergesort(arr: MutableList<Int>, left: Int, right: Int) {
+    if (left < right) {
         val mid = (left + right) / 2
         mergesort(arr, left, mid)
         mergesort(arr, mid + 1, right)
@@ -92,7 +153,7 @@ private fun mergesort(arr: MutableList<Int>, left : Int, right : Int){
     }
 }
 
-private fun merge(arr : MutableList<Int>, left : Int, mid : Int, right : Int){
+private fun merge(arr: MutableList<Int>, left: Int, mid: Int, right: Int) {
     val n1 = mid - left + 1
     val n2 = right - mid
 
@@ -103,19 +164,19 @@ private fun merge(arr : MutableList<Int>, left : Int, mid : Int, right : Int){
     var j = 0
     var k = left
 
-    while (i < n1 && j < n2){
-        if(leftArr[i] <= rightArr[j]){
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
             arr[k++] = leftArr[i++]
-        }else{
+        } else {
             arr[k++] = rightArr[j++]
         }
     }
 
-    while(i < n1){
+    while (i < n1) {
         arr[k++] = leftArr[i++]
     }
 
-    while(j < n2){
+    while (j < n2) {
         arr[k++] = rightArr[j++]
     }
 }
