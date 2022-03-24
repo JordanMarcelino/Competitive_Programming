@@ -5,28 +5,79 @@ package kotlin_for_cp.learn
 /* ------------------ START SUBMISSION ------------------ */
 import java.io.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 private fun solve() {
-    println(countConstruct("bambang", arrayOf("ba", "bamb", "mb", "ang")))
-    println(countConstruct("bambang", arrayOf("ba", "bamb", "mb", "ng")))
-    println(countConstruct("rendy", arrayOf("ren", "dy", "re", "n")))
-    println(countConstruct("eeeeeeeeeeeeeeeeef", arrayOf(
-        "eeee",
-        "eeeeeeee",
-        "eeeeeeeeee",
-        "eeeeeeeeeeeeeee"
-    )))
+    println(tabGridTraveller(4,3))
+    println(gridTraveller(4,3))
 }
 
-fun countConstruct(target : String, wordBank: Array<String>, memo: MutableMap<String, Int?> = mutableMapOf()) : Int? {
+fun main() {
+    setUpIO()
+    var tc = 1
+    // TODO: no tc input for single test
+    tc = i.int()
+    flush { for (i in 0 until tc) solve() }
+}
+
+fun tabGridTraveller(row: Int, col: Int) : Int {
+    val grid = MutableList(row + 1) { MutableList(col + 1) { 0 } }
+    grid[1][1] = 1
+
+    for (i in 1..row) {
+        for (j in 1..col) {
+            if (j + 1 <= col) grid[i][j+1] += grid[i][j]
+            if (i +1 <= row) grid[i+1][j] += grid[i][j]
+        }
+    }
+
+    return grid[row][col]
+}
+
+fun tabFib(n : Int) : Long{
+    val fib = MutableList(n+1){0L}
+    fib[0] = 0
+    fib[1] = 1
+    for (i in 2..n){
+        fib[i] = fib[i-1] + fib[i-2]
+    }
+    return fib[n]
+}
+
+fun allConstruct(
+    target: String, wordBank: Array<String>, memo: MutableMap<String, MutableList<MutableList<String>>>
+    = mutableMapOf()
+): MutableList<MutableList<String>> {
+    if (target == "") return mutableListOf(mutableListOf())
+
+    val total = mutableListOf<MutableList<String>>()
+
+    for (word in wordBank) {
+        if (target.startsWith(word)) {
+            val suffix = target.substring(word.length)
+            val suffixes = allConstruct(suffix, wordBank)
+            val result = suffixes.map {
+                mutableListOf(word) + it
+            }
+            result.map {
+                total.add(it as MutableList<String>)
+            }
+        }
+    }
+
+    memo[target] = total
+    return total
+}
+
+fun countConstruct(target: String, wordBank: Array<String>, memo: MutableMap<String, Int?> = mutableMapOf()): Int? {
     if (target in memo) return memo[target]
     if (target == "") return 1
 
-    var totalRes : Int = 0
+    var totalRes: Int = 0
 
-    for (word in wordBank){
-        if (target.indexOf(word) == 0){
+    for (word in wordBank) {
+        if (target.indexOf(word) == 0) {
             val suffix = target.slice(word.length until target.length)
             totalRes += countConstruct(suffix, wordBank, memo) ?: 0
         }
@@ -36,14 +87,18 @@ fun countConstruct(target : String, wordBank: Array<String>, memo: MutableMap<St
     return totalRes
 }
 
-fun canConstruct(target : String, wordBank : Array<String>, memo : MutableMap<String, Boolean> = mutableMapOf()) : Boolean? {
+fun canConstruct(
+    target: String,
+    wordBank: Array<String>,
+    memo: MutableMap<String, Boolean> = mutableMapOf()
+): Boolean? {
     if (target in memo) return memo[target]
     if (target == "") return true
 
-    for (word in wordBank){
-        if (target.indexOf(word, ignoreCase = true) == 0){
+    for (word in wordBank) {
+        if (target.indexOf(word, ignoreCase = true) == 0) {
             val suffix = target.slice(word.length until target.length)
-            if (canConstruct(suffix, wordBank, memo) != null && canConstruct(suffix, wordBank, memo) == true){
+            if (canConstruct(suffix, wordBank, memo) != null && canConstruct(suffix, wordBank, memo) == true) {
                 memo[target] = true
                 return true
             }
@@ -54,21 +109,21 @@ fun canConstruct(target : String, wordBank : Array<String>, memo : MutableMap<St
     return false
 }
 
-fun bestSum(targetSum: Int, numbers: IntArray, memo: MutableMap<Int, Array<Int>?> = mutableMapOf()) : Array<Int>? {
+fun bestSum(targetSum: Int, numbers: IntArray, memo: MutableMap<Int, Array<Int>?> = mutableMapOf()): Array<Int>? {
     if (targetSum in memo) return memo[targetSum]
     if (numbers.isEmpty()) return null
     if (targetSum == 0) return emptyArray()
     if (targetSum < 0) return null
 
-    var shortestArr : Array<Int>? = null
+    var shortestArr: Array<Int>? = null
 
-    for (num in numbers){
+    for (num in numbers) {
         val res = targetSum - num
         var result = bestSum(res, numbers, memo)
         result?.let {
             result = it + arrayOf(num)
         }
-        if (shortestArr.isNullOrEmpty() || !result.isNullOrEmpty() && result!!.size < shortestArr.size){
+        if (shortestArr.isNullOrEmpty() || !result.isNullOrEmpty() && result!!.size < shortestArr.size) {
             shortestArr = result
         }
     }
@@ -87,7 +142,7 @@ fun howSum(targetSum: Int, numbers: IntArray, memo: MutableMap<Int, Array<Int>?>
         val res = targetSum - num
         val result = howSum(res, numbers, memo)
         result?.let {
-            memo[res] =  it + arrayOf(num)
+            memo[res] = it + arrayOf(num)
             return memo[res]
         }
     }
@@ -133,14 +188,6 @@ fun fib(n: Int, memo: MutableMap<Int, Long> = mutableMapOf()): Long {
     return memo[n]!!
 }
 
-
-fun main() {
-    setUpIO()
-    var tc = 1
-    // TODO: no tc input for single test
-    tc = i.int()
-    flush { for (i in 0 until tc) solve() }
-}
 
 private fun mergesort(arr: IntArray) {
     mergesort(arr, 0, arr.size - 1)
