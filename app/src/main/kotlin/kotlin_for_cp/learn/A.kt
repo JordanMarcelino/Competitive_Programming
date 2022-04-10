@@ -9,15 +9,16 @@ import kotlin.collections.ArrayList
 
 
 private fun solve() {
-    println(tabGridTraveller(4,3))
-    println(gridTraveller(4,3))
+    println(gcd(172,324))
+    println(gcd(17, 7))
+    println(gcd(312, 70))
 }
 
 fun main() {
     setUpIO()
     var tc = 1
     // TODO: no tc input for single test
-    tc = i.int()
+//    tc = i.int()
     flush { for (i in 0 until tc) solve() }
 }
 
@@ -269,6 +270,14 @@ private fun merge(arr: MutableList<Int>, left: Int, mid: Int, right: Int) {
     while (j < n2) {
         arr[k++] = rightArr[j++]
     }
+}
+
+fun gcd(a: Int, b: Int): Int {
+    return if (a == 0) b else gcd(b % a, a)
+}
+
+fun lcm(a: Int, b: Int): Int {
+    return a / gcd(a, b) * b
 }
 
 fun setUpIO() {
