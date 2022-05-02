@@ -1,20 +1,35 @@
-package org.competitive.programming;
+package org.competitive.programming.hacker_rank;
 
 // Start of user code (user defined imports)
-import java.io.*;
-import java.util.*;
-import static java.lang.Math.*;
 
-public class Solution {
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.TreeMap;
+
+public class DesignerPDFViewer {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {}
+    public DesignerPDFViewer() {}
 
     void solve() throws IOException {
+        int[] height = readArr(26);
+        String word= s();
+        int[] wordHeight = new int[word.length()];
+        int i = 0;
 
+        for(char a : word.toCharArray())
+            wordHeight[i++] = height[a - 'a'];
 
+        int max = Arrays.stream(wordHeight).max().getAsInt();
+
+        out.println(max * word.length());
     }
 
     void run() throws IOException {
@@ -29,7 +44,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        DesignerPDFViewer driver = new DesignerPDFViewer();
 
         driver.run();
         driver.closeResources();

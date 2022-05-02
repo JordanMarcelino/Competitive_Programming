@@ -1,26 +1,46 @@
-package org.competitive.programming;
+package org.competitive.programming.hacker_rank;
 
 // Start of user code (user defined imports)
-import java.io.*;
-import java.util.*;
-import static java.lang.Math.*;
 
-public class Solution {
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeMap;
+
+public class UtopianTree {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {}
+    public UtopianTree() {}
 
     void solve() throws IOException {
+        int N = i();
+        int initial = 1;
 
+        if(N == 0){
+            out.println(1);
+            return;
+        }
 
+        // 0 = 2
+        // 1 = 3
+        // 2 = 6
+        for (int i = 0; i < N; i++) {
+            if(i % 2 == 0) initial *= 2;
+            else initial += 1;
+        }
+
+        out.println(initial);
     }
 
     void run() throws IOException {
         int tc = 1;
 //        If want to run multiple test cases, use below code
-//        tc = i();
+        tc = i();
 
         for (int i = 1; i <= tc; i++) {
 //            out.println("Case #" + i + ": ");
@@ -29,7 +49,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        UtopianTree driver = new UtopianTree();
 
         driver.run();
         driver.closeResources();
