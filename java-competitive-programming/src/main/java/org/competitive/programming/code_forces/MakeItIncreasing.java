@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_forces;
 
 // Start of user code (user defined imports)
 
@@ -6,24 +6,48 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeMap;
 
-public class Solution {
+public class MakeItIncreasing {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public MakeItIncreasing() {
     }
 
     void solve() throws IOException {
+        int N = i();
+        int[] arr = readArr(N);
 
+        if (N == 1) {
+            out.println(0);
+            return;
+        }
+
+        int ans = 0;
+
+        for (int i = N - 2; i >= 0 ; i--) {
+            if(arr[i+1] == 0){
+                out.println(-1);
+                return;
+            }
+
+            while(arr[i] >= arr[i + 1]) {
+                arr[i] /= 2;
+                ans++;
+            }
+        }
+
+        out.println(ans);
     }
 
     void run() throws IOException {
         int tc = 1;
 //        If want to run multiple test cases, use below code
-//        tc = i();
+        tc = i();
 
         for (int i = 1; i <= tc; i++) {
 //            out.println("Case #" + i + ": ");
@@ -32,7 +56,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        MakeItIncreasing driver = new MakeItIncreasing();
 
         driver.run();
         driver.closeResources();
@@ -104,31 +128,6 @@ public class Solution {
     long lcm(long a, long b) {
         if (a == 0 || b == 0) return 0;
         return (a * b) / gcd(a, b);
-    }
-
-    <T> List<List<T>> permutations(T[] arr) {
-        List<List<T>> result = new ArrayList<>();
-
-        if (arr.length == 0){
-            result.add(new ArrayList<T>());
-            return result;
-        }
-
-        T firstEl = arr[0];
-        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
-
-        for (var perm : permsWithoutFirst) {
-            for (int i = 0; i <= perm.size(); i++) {
-                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
-                permsWithFirst.add(firstEl);
-                permsWithFirst.addAll(perm.subList(i, perm.size()));
-
-                result.add(permsWithFirst);
-            }
-        }
-
-
-        return result;
     }
 
     ArrayList<Integer> findDiv(int N) {

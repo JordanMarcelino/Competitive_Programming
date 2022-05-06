@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.hacker_rank;
 
 // Start of user code (user defined imports)
 
@@ -6,18 +6,29 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeMap;
 
-public class Solution {
+public class JumpingOnTheCloud {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
-    }
+    public JumpingOnTheCloud() {}
 
     void solve() throws IOException {
+        int N = i();
+        int K = i();
+        int[] clouds = readArr(N);
+        int energy = 100;
 
+        for (int i = 0; i < N; i+=K) {
+            if (clouds[i] == 1) energy -= 3;
+            else energy -= 1;
+        }
+
+        out.println(energy);
     }
 
     void run() throws IOException {
@@ -32,7 +43,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        JumpingOnTheCloud driver = new JumpingOnTheCloud();
 
         driver.run();
         driver.closeResources();
@@ -104,31 +115,6 @@ public class Solution {
     long lcm(long a, long b) {
         if (a == 0 || b == 0) return 0;
         return (a * b) / gcd(a, b);
-    }
-
-    <T> List<List<T>> permutations(T[] arr) {
-        List<List<T>> result = new ArrayList<>();
-
-        if (arr.length == 0){
-            result.add(new ArrayList<T>());
-            return result;
-        }
-
-        T firstEl = arr[0];
-        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
-
-        for (var perm : permsWithoutFirst) {
-            for (int i = 0; i <= perm.size(); i++) {
-                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
-                permsWithFirst.add(firstEl);
-                permsWithFirst.addAll(perm.subList(i, perm.size()));
-
-                result.add(permsWithFirst);
-            }
-        }
-
-
-        return result;
     }
 
     ArrayList<Integer> findDiv(int N) {

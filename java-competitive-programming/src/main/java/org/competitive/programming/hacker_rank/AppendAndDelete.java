@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.hacker_rank;
 
 // Start of user code (user defined imports)
 
@@ -6,18 +6,49 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeMap;
 
-public class Solution {
+public class AppendAndDelete {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public AppendAndDelete() {
     }
 
     void solve() throws IOException {
+        String s = s();
+        String t = s();
+        int k = i();
 
+        if (s.equalsIgnoreCase(t)) {
+            out.println("Yes");
+            return;
+        }
+
+        char[] from = s.toCharArray();
+        char[] to = t.toCharArray();
+
+
+        boolean valid = Math.abs(from.length - to.length) > k;
+
+        for (int i = 0; i < to.length; i++) {
+            try{
+                if (from[i] != to[i]) {
+                    if (from.length - i + to.length - i > k) out.println("No");
+                    else out.println("Yes");
+                    return;
+                }
+            }catch (IndexOutOfBoundsException e){
+                if (valid) out.println("No");
+                else out.println("Yes");
+                return;
+            }
+        }
+
+        out.println(valid ? "No" : "Yes");
     }
 
     void run() throws IOException {
@@ -32,7 +63,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        AppendAndDelete driver = new AppendAndDelete();
 
         driver.run();
         driver.closeResources();
@@ -104,31 +135,6 @@ public class Solution {
     long lcm(long a, long b) {
         if (a == 0 || b == 0) return 0;
         return (a * b) / gcd(a, b);
-    }
-
-    <T> List<List<T>> permutations(T[] arr) {
-        List<List<T>> result = new ArrayList<>();
-
-        if (arr.length == 0){
-            result.add(new ArrayList<T>());
-            return result;
-        }
-
-        T firstEl = arr[0];
-        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
-
-        for (var perm : permsWithoutFirst) {
-            for (int i = 0; i <= perm.size(); i++) {
-                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
-                permsWithFirst.add(firstEl);
-                permsWithFirst.addAll(perm.subList(i, perm.size()));
-
-                result.add(permsWithFirst);
-            }
-        }
-
-
-        return result;
     }
 
     ArrayList<Integer> findDiv(int N) {
