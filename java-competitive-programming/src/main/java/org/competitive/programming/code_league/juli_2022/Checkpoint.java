@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_league.juli_2022;
 
 // Start of user code (user defined imports)
 
@@ -8,22 +8,95 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Solution {
+public class Checkpoint {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public Checkpoint() {
     }
 
     void solve() throws IOException {
+        Map<Integer, Integer> scoreBoard = new HashMap<>();
+        List<Integer> impos = new ArrayList<>(List.of(7, 10, 11));
+        List<Integer> score = new ArrayList<>();
+        boolean pos = false;
 
+        for (int i = 0; i < 4; i++) {
+            int temp = i();
+            if (impos.contains(temp)) {
+                out.println("IMPOSSIBLE");
+                pos = true;
+            }
+            score.add(temp);
+        }
+
+        if (pos) return;
+
+        if (score.contains(12)){
+            int twelveCount = (int) score.stream().filter(integer -> integer == 12).count();
+            if (twelveCount > 1){
+                out.println("IMPOSSIBLE"); return;
+            }
+        }
+
+        for (int sc : score) {
+            if (sc % 4 == 0) {
+                if (sc == 12) {
+                    push(scoreBoard, 1, 3);
+                } else if (sc > 0) {
+                    push(scoreBoard, 1, sc / 4);
+                    push(scoreBoard, -1, sc / 4 == 1 ? 2 : 1);
+                } else {
+                    push(scoreBoard, -1, 3);
+                }
+            } else if (sc % 4 == 1) {
+                if (sc > 4) {
+                    if (sc == 5) {
+                        push(scoreBoard, 1, 1);
+                        push(scoreBoard, 0, 1);
+                        push(scoreBoard, -1, 1);
+                    } else {
+                        push(scoreBoard, 1, 2);
+                        push(scoreBoard, 0, 1);
+                    }
+                } else {
+                    push(scoreBoard, 0, 1);
+                    push(scoreBoard, -1, 2);
+                }
+            } else if (sc % 4 == 2) {
+                if (sc > 4) {
+                    push(scoreBoard, 1, 1);
+                    push(scoreBoard, 0, 2);
+                } else {
+                    push(scoreBoard, 0, 2);
+                    push(scoreBoard, -1, 1);
+                }
+            }
+        }
+
+        int tmp = 0;
+
+        out.println(scoreBoard);
+        if (!Objects.equals(scoreBoard.get(-1), scoreBoard.get(1))){
+            out.println("IMPOSSIBLE"); return;
+        }
+
+        for (var sc : scoreBoard.entrySet()) {
+            if (sc.getValue() > 6) {
+                out.println("IMPOSSIBLE");
+                return;
+            }
+            tmp += sc.getValue();
+        }
+
+        out.println(tmp > 12 ? "IMPOSSIBLE" : "POSSIBLE");
     }
 
     void run() throws IOException {
         int tc = 1;
 //        If want to run multiple test cases, use below code
-//        tc = i();
+        tc = i();
 
         for (int i = 1; i <= tc; i++) {
 //            out.println("Case #" + i + ": ");
@@ -32,7 +105,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        Checkpoint driver = new Checkpoint();
 
         driver.run();
         driver.closeResources();
@@ -104,6 +177,31 @@ public class Solution {
     long lcm(long a, long b) {
         if (a == 0 || b == 0) return 0;
         return (a * b) / gcd(a, b);
+    }
+
+    <T> List<List<T>> permutations(T[] arr) {
+        List<List<T>> result = new ArrayList<>();
+
+        if (arr.length == 0) {
+            result.add(new ArrayList<T>());
+            return result;
+        }
+
+        T firstEl = arr[0];
+        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
+
+        for (var perm : permsWithoutFirst) {
+            for (int i = 0; i <= perm.size(); i++) {
+                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
+                permsWithFirst.add(firstEl);
+                permsWithFirst.addAll(perm.subList(i, perm.size()));
+
+                result.add(permsWithFirst);
+            }
+        }
+
+
+        return result;
     }
 
     ArrayList<Integer> findDiv(int N) {

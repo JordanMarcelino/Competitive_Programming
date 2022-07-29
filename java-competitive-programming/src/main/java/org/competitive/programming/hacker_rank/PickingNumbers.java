@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.hacker_rank;
 
 // Start of user code (user defined imports)
 
@@ -6,18 +6,36 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.TreeMap;
 
-public class Solution {
+import static java.lang.Math.*;
+
+
+public class PickingNumbers {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public PickingNumbers() {
     }
 
     void solve() throws IOException {
+       int n = i();
+       int[] arr = new int[100];
 
+        for (int i = 0; i < n; i++) {
+            arr[i()]++;
+        }
+
+        int res = Integer.MIN_VALUE;
+        for (int i = 0; i < 99; i++) {
+            res = Math.max(res, arr[i] + arr[i+1]);
+        }
+
+        out.println(res);
     }
 
     void run() throws IOException {
@@ -32,7 +50,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        PickingNumbers driver = new PickingNumbers();
 
         driver.run();
         driver.closeResources();
@@ -144,7 +162,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +170,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

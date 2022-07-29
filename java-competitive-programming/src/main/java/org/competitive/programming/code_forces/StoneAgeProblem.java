@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_forces;
 
 // Start of user code (user defined imports)
 
@@ -6,17 +6,45 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.*;
 
-public class Solution {
+public class StoneAgeProblem {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
+    static BigDecimal sum = new BigDecimal(0);
 
-    public Solution() {
+
+    public StoneAgeProblem() {
     }
 
     void solve() throws IOException {
+        int n = i();
+        int q = i();
+        long sum = 0;
+        int x = 0;
+        int y = 0;
+        int[] arr = readArr(n);
+        int[] memo = new int[n];
+        for (int i : arr) sum += i;
+
+        for (int i = 0; i < q; i++) {
+            int it = i();
+
+            if (it == 1){
+                int idx = i() - 1, value = i();
+                int sub = memo[idx] == x ? arr[idx] : y;
+                memo[idx] = x; arr[idx] = value;
+                sum += value - sub;
+            }else{
+                x++;
+                y = i();
+                sum = (long) n * y;
+            }
+            out.println(sum);
+        }
 
     }
 
@@ -32,7 +60,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        StoneAgeProblem driver = new StoneAgeProblem();
 
         driver.run();
         driver.closeResources();
@@ -78,6 +106,18 @@ public class Solution {
         return arr;
     }
 
+    long[] readArrLongWithSum(int N) throws IOException {
+        long[] arr = new long[N];
+
+        for (int i = 0; i < N; i++){
+            long value = l();
+            arr[i] = value;
+            sum = sum.add(new BigDecimal(value));
+        }
+
+        return arr;
+    }
+
     void print(int[] arr) {
         //for debugging only
         for (int x : arr)
@@ -104,6 +144,31 @@ public class Solution {
     long lcm(long a, long b) {
         if (a == 0 || b == 0) return 0;
         return (a * b) / gcd(a, b);
+    }
+
+    <T> List<List<T>> permutations(T[] arr) {
+        List<List<T>> result = new ArrayList<>();
+
+        if (arr.length == 0) {
+            result.add(new ArrayList<T>());
+            return result;
+        }
+
+        T firstEl = arr[0];
+        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
+
+        for (var perm : permsWithoutFirst) {
+            for (int i = 0; i <= perm.size(); i++) {
+                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
+                permsWithFirst.add(firstEl);
+                permsWithFirst.addAll(perm.subList(i, perm.size()));
+
+                result.add(permsWithFirst);
+            }
+        }
+
+
+        return result;
     }
 
     ArrayList<Integer> findDiv(int N) {
@@ -144,7 +209,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +217,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

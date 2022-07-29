@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_league.juni_2022;
 
 // Start of user code (user defined imports)
 
@@ -8,16 +8,49 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Solution {
+public class TeamCombinations {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
+    private final Map<Integer, Integer> memo = new HashMap<>();
 
-    public Solution() {
+    public TeamCombinations() {
     }
 
     void solve() throws IOException {
+        int a = i();
+        int b = i();
+        int c = i();
+        int[] mtk = {1,2,2};
+        int[] kimia = {2,3,1};
+        int[] anggota = {a,b,c};
 
+        int mtkCom = 1;
+        int kimiaCom = 1;
+
+        for (int i = 0; i < 3; i++) {
+            double combinations = combinations(anggota[i], mtk[i]);
+            mtkCom *= combinations;
+
+            double combinations1 = combinations(anggota[i], kimia[i]);
+            kimiaCom *= combinations1;
+        }
+
+        out.println("Matematika: " + mtkCom + " team");
+        out.println("Kimia: " + kimiaCom + " team");
+    }
+
+    double combinations(int n, int r){
+        return (double) factorial(n) / (double)(factorial(r) * factorial(n-r));
+    }
+
+    int factorial(int n){
+        if (n <= 1) return 1;
+        if (memo.containsKey(n)) return memo.get(n);
+
+        memo.put(n, n * factorial(n - 1));
+
+        return memo.get(n);
     }
 
     void run() throws IOException {
@@ -32,7 +65,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        TeamCombinations driver = new TeamCombinations();
 
         driver.run();
         driver.closeResources();
@@ -106,6 +139,31 @@ public class Solution {
         return (a * b) / gcd(a, b);
     }
 
+    <T> List<List<T>> permutations(T[] arr) {
+        List<List<T>> result = new ArrayList<>();
+
+        if (arr.length == 0){
+            result.add(new ArrayList<T>());
+            return result;
+        }
+
+        T firstEl = arr[0];
+        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
+
+        for (var perm : permsWithoutFirst) {
+            for (int i = 0; i <= perm.size(); i++) {
+                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
+                permsWithFirst.add(firstEl);
+                permsWithFirst.addAll(perm.subList(i, perm.size()));
+
+                result.add(permsWithFirst);
+            }
+        }
+
+
+        return result;
+    }
+
     ArrayList<Integer> findDiv(int N) {
         //gens all divisors of N
         ArrayList<Integer> ls1 = new ArrayList<Integer>();
@@ -144,7 +202,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +210,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

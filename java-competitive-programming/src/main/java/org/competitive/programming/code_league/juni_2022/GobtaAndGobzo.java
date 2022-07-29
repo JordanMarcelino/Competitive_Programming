@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_league.juni_2022;
 
 // Start of user code (user defined imports)
 
@@ -8,16 +8,66 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Solution {
+public class GobtaAndGobzo {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
+    double maxVal = 1e15;
 
-    public Solution() {
+    public GobtaAndGobzo() {
     }
 
     void solve() throws IOException {
+        double price = d();
+        List<Double> possible = new ArrayList<>();
 
+        int it = 0;
+        while (Math.pow(5, it) <= maxVal) {
+            possible.add(Math.pow(5, it++));
+        }
+
+        int idx = binarySearch(possible, price);
+        double temp = price;
+
+        for (int i = idx; i >= 0; i--) {
+            if (possible.get(i) <= temp) temp -= possible.get(i);
+        }
+
+        if (temp == 0) {
+            out.println("DONE GAN");
+        } else {
+            double sisa = possible.get(idx + 1) - price;
+            idx = binarySearch(possible, sisa);
+
+            for (int i = idx; i >= 0; i--) {
+                if (possible.get(i) <= sisa) sisa -= possible.get(i);
+            }
+
+            if (sisa == 0) {
+                out.println("DONE GAN");
+            } else {
+                out.println("UP GAN");
+            }
+        }
+
+    }
+
+    int binarySearch(List<Double> list, double target) {
+        int left = 0, right = list.size();
+        int result = -1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (list.get(mid) == target) return mid;
+
+            if (target > list.get(mid)) left = mid + 1;
+            else if (target < list.get(mid)) {
+                right = mid - 1;
+                result = mid - 1;
+            }
+        }
+
+        return result;
     }
 
     void run() throws IOException {
@@ -32,7 +82,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        GobtaAndGobzo driver = new GobtaAndGobzo();
 
         driver.run();
         driver.closeResources();
@@ -106,6 +156,31 @@ public class Solution {
         return (a * b) / gcd(a, b);
     }
 
+    <T> List<List<T>> permutations(T[] arr) {
+        List<List<T>> result = new ArrayList<>();
+
+        if (arr.length == 0) {
+            result.add(new ArrayList<T>());
+            return result;
+        }
+
+        T firstEl = arr[0];
+        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
+
+        for (var perm : permsWithoutFirst) {
+            for (int i = 0; i <= perm.size(); i++) {
+                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
+                permsWithFirst.add(firstEl);
+                permsWithFirst.addAll(perm.subList(i, perm.size()));
+
+                result.add(permsWithFirst);
+            }
+        }
+
+
+        return result;
+    }
+
     ArrayList<Integer> findDiv(int N) {
         //gens all divisors of N
         ArrayList<Integer> ls1 = new ArrayList<Integer>();
@@ -144,7 +219,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +227,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

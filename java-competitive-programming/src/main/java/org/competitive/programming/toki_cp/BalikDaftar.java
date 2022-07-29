@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.toki_cp;
 
 // Start of user code (user defined imports)
 
@@ -8,15 +8,25 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Solution {
+public class BalikDaftar {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public BalikDaftar() {
     }
 
     void solve() throws IOException {
+        Scanner sc = new Scanner(System.in);
+        int[] arr = new int[1000];
+        int i = 0;
+        while(sc.hasNextInt()){
+            arr[i++] = sc.nextInt();
+        }
+
+        for (int j = i - 1; j >= 0 ; j--) {
+            out.println(arr[j]);
+        }
 
     }
 
@@ -32,7 +42,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        BalikDaftar driver = new BalikDaftar();
 
         driver.run();
         driver.closeResources();
@@ -144,7 +154,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +162,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

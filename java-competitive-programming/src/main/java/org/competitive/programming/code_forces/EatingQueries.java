@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_forces;
 
 // Start of user code (user defined imports)
 
@@ -8,15 +8,40 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Solution {
+public class EatingQueries {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public EatingQueries() {
     }
 
     void solve() throws IOException {
+        int n = i();
+        int q = i();
+        int[] quantity = readArr(n);
+        quantity = Arrays.stream(quantity).boxed().sorted((o1, o2) -> o2 - o1).mapToInt(a->a).toArray();
+
+        for (int i = 1; i < n; i++) quantity[i] += quantity[i-1];
+
+        for (int i = 0; i < q; i++) {
+            int value = i();
+            int result = -1;
+            int left = 0;
+            int right = n - 1;
+
+            while (left <= right){
+                int mid = left + (right - left)/2;
+                if (quantity[mid] >= value){
+                    right = mid - 1;
+                    result = mid + 1;
+                }else if(quantity[mid] < value){
+                  left = mid + 1;
+                }
+            }
+
+            out.println(result);
+        }
 
     }
 
@@ -32,7 +57,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        EatingQueries driver = new EatingQueries();
 
         driver.run();
         driver.closeResources();
@@ -106,6 +131,31 @@ public class Solution {
         return (a * b) / gcd(a, b);
     }
 
+    <T> List<List<T>> permutations(T[] arr) {
+        List<List<T>> result = new ArrayList<>();
+
+        if (arr.length == 0){
+            result.add(new ArrayList<T>());
+            return result;
+        }
+
+        T firstEl = arr[0];
+        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
+
+        for (var perm : permsWithoutFirst) {
+            for (int i = 0; i <= perm.size(); i++) {
+                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
+                permsWithFirst.add(firstEl);
+                permsWithFirst.addAll(perm.subList(i, perm.size()));
+
+                result.add(permsWithFirst);
+            }
+        }
+
+
+        return result;
+    }
+
     ArrayList<Integer> findDiv(int N) {
         //gens all divisors of N
         ArrayList<Integer> ls1 = new ArrayList<Integer>();
@@ -133,6 +183,18 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
+    void sortReverse(int[] arr) {
+        //because Arrays.sort() uses quicksort which is dumb
+        //Collections.sort() uses merge sort
+        ArrayList<Integer> ls = new ArrayList<Integer>();
+        for (int x : arr)
+            ls.add(x);
+        Collections.sort(ls);
+        Collections.reverse(ls);
+        for (int i = 0; i < arr.length; i++)
+            arr[i] = ls.get(i);
+    }
+
     void sort(long[] arr) {
         //because Arrays.sort() uses quicksort which is dumb
         //Collections.sort() uses merge sort
@@ -144,7 +206,19 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void sortReverse(long[] arr) {
+        //because Arrays.sort() uses quicksort which is dumb
+        //Collections.sort() uses merge sort
+        ArrayList<Long> ls = new ArrayList<>();
+        for (long x : arr)
+            ls.add(x);
+        Collections.sort(ls);
+        Collections.reverse(ls);
+        for (int i = 0; i < arr.length; i++)
+            arr[i] = ls.get(i);
+    }
+
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +226,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

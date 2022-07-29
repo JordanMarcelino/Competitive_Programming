@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_league.juli_2022;
 
 // Start of user code (user defined imports)
 
@@ -8,15 +8,40 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Solution {
+public class LordUsop {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public LordUsop() {
     }
 
     void solve() throws IOException {
+        String pass = s();
+        int n = i();
+        List<Integer> num = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            num.add(i());
+        }
+
+        String toRemove = "";
+        int idx = 0;
+        for (int i = 0; i < pass.length() - 1; i+=2) {
+            String temp = pass.charAt(i) + "" + pass.charAt(i+1);
+            if (temp.charAt(0) == '0'){
+                temp = temp.replace("0", "");
+            }
+            if (num.contains(Integer.parseInt(temp))){
+                num.remove((Integer) Integer.parseInt(temp));
+            }else{
+                toRemove = temp;
+            }
+        }
+
+        String toAdd = String.valueOf(num.get(0)).length() == 2 ? String.valueOf(num.get(0)) : "0" + num.get(0);
+        pass = pass.replace(toRemove, toAdd);
+        out.println(pass);
 
     }
 
@@ -32,7 +57,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        LordUsop driver = new LordUsop();
 
         driver.run();
         driver.closeResources();
@@ -106,6 +131,31 @@ public class Solution {
         return (a * b) / gcd(a, b);
     }
 
+    <T> List<List<T>> permutations(T[] arr) {
+        List<List<T>> result = new ArrayList<>();
+
+        if (arr.length == 0){
+            result.add(new ArrayList<T>());
+            return result;
+        }
+
+        T firstEl = arr[0];
+        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
+
+        for (var perm : permsWithoutFirst) {
+            for (int i = 0; i <= perm.size(); i++) {
+                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
+                permsWithFirst.add(firstEl);
+                permsWithFirst.addAll(perm.subList(i, perm.size()));
+
+                result.add(permsWithFirst);
+            }
+        }
+
+
+        return result;
+    }
+
     ArrayList<Integer> findDiv(int N) {
         //gens all divisors of N
         ArrayList<Integer> ls1 = new ArrayList<Integer>();
@@ -144,7 +194,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +202,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

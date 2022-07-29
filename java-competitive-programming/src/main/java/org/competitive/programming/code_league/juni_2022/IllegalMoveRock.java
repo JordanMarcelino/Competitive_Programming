@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_league.juni_2022;
 
 // Start of user code (user defined imports)
 
@@ -7,23 +7,55 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.stream.IntStream;
 
-public class Solution {
+public class IllegalMoveRock {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public IllegalMoveRock() {
     }
 
     void solve() throws IOException {
+        int n = i();
+        int m = i();
+        int[] move = readArr(m);
+        boolean legal = true;
 
+
+
+        for (int i = 1; i < m; i++) {
+            int moved = Math.abs(move[i] - move[i-1]);
+
+            if (move[i] > n*n){
+                legal = false; break;
+            }
+
+            if (moved != n && moved != 1){
+                legal = false; break;
+            }
+
+            if (moved == 1){
+                int range = (int) Math.ceil(move[i] / (double) n);
+                IntStream range1 = IntStream.range(n * (range - 1) + 1, range * n + 1);
+
+                int finalI = i;
+                boolean match = range1.anyMatch(value -> value == move[finalI - 1]);
+
+                if (!match){
+                    legal = false; break;
+                }
+            }
+        }
+
+        out.println(legal ? "LEGAL" : "ILLEGAL");
     }
 
     void run() throws IOException {
         int tc = 1;
 //        If want to run multiple test cases, use below code
-//        tc = i();
+        tc = i();
 
         for (int i = 1; i <= tc; i++) {
 //            out.println("Case #" + i + ": ");
@@ -32,7 +64,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        IllegalMoveRock driver = new IllegalMoveRock();
 
         driver.run();
         driver.closeResources();
@@ -106,6 +138,31 @@ public class Solution {
         return (a * b) / gcd(a, b);
     }
 
+    <T> List<List<T>> permutations(T[] arr) {
+        List<List<T>> result = new ArrayList<>();
+
+        if (arr.length == 0){
+            result.add(new ArrayList<T>());
+            return result;
+        }
+
+        T firstEl = arr[0];
+        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
+
+        for (var perm : permsWithoutFirst) {
+            for (int i = 0; i <= perm.size(); i++) {
+                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
+                permsWithFirst.add(firstEl);
+                permsWithFirst.addAll(perm.subList(i, perm.size()));
+
+                result.add(permsWithFirst);
+            }
+        }
+
+
+        return result;
+    }
+
     ArrayList<Integer> findDiv(int N) {
         //gens all divisors of N
         ArrayList<Integer> ls1 = new ArrayList<Integer>();
@@ -144,7 +201,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +209,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

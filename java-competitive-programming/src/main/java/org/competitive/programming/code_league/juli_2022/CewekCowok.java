@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.code_league.juli_2022;
 
 // Start of user code (user defined imports)
 
@@ -8,16 +8,53 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Solution {
+public class CewekCowok {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public CewekCowok() {
     }
 
     void solve() throws IOException {
+        final String girl = "CHAT WITH HER!";
+        final String boy = "IGNORE HIM!";
 
+        String name = s();
+        Map<Character, Integer> hash = new HashMap<>();
+
+        for (char c : name.toCharArray()) {
+            if (!hash.containsKey(c)){
+                hash.put(c, 1);
+            }else{
+                hash.put(c, hash.get(c) + 1);
+            }
+        }
+
+        int temp = 0;
+        for (int i = 0; i < name.length() - 1; i++) {
+            if (i < temp) continue;
+
+            if (name.charAt(i) == name.charAt(i+1)){
+                for (int j = i + 1; j < name.length() - 1; j++) {
+                    if (name.charAt(j) != name.charAt(j+1)){
+                        hash.put(name.charAt(j), hash.get(name.charAt(j)) - (j-i+1));
+                        temp = j + 1;
+                        break;
+                    }
+                }
+            }
+        }
+
+        int res = 0;
+
+        for (var set: hash.entrySet()) {
+            if (set.getValue() != 0){
+                res++;
+            }
+        }
+
+        out.println(res % 2 == 0 ? girl : boy);
     }
 
     void run() throws IOException {
@@ -32,7 +69,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        CewekCowok driver = new CewekCowok();
 
         driver.run();
         driver.closeResources();
@@ -106,6 +143,31 @@ public class Solution {
         return (a * b) / gcd(a, b);
     }
 
+    <T> List<List<T>> permutations(T[] arr) {
+        List<List<T>> result = new ArrayList<>();
+
+        if (arr.length == 0){
+            result.add(new ArrayList<T>());
+            return result;
+        }
+
+        T firstEl = arr[0];
+        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
+
+        for (var perm : permsWithoutFirst) {
+            for (int i = 0; i <= perm.size(); i++) {
+                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
+                permsWithFirst.add(firstEl);
+                permsWithFirst.addAll(perm.subList(i, perm.size()));
+
+                result.add(permsWithFirst);
+            }
+        }
+
+
+        return result;
+    }
+
     ArrayList<Integer> findDiv(int N) {
         //gens all divisors of N
         ArrayList<Integer> ls1 = new ArrayList<Integer>();
@@ -144,7 +206,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +214,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

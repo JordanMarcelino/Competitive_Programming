@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.hacker_rank;
 
 // Start of user code (user defined imports)
 
@@ -8,15 +8,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Solution {
+
+public class ClimbingLeaderboard {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public Solution() {
+    public ClimbingLeaderboard() {
     }
 
     void solve() throws IOException {
+       int n = i();
+       int[] ranked = readArr(n);
+
+
+
+       int m = i();
+       int[] player = readArr(m);
+       List<Integer> result = new ArrayList<>();
+
+        Arrays.stream(ranked);
 
     }
 
@@ -32,7 +43,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        ClimbingLeaderboard driver = new ClimbingLeaderboard();
 
         driver.run();
         driver.closeResources();
@@ -144,7 +155,7 @@ public class Solution {
             arr[i] = ls.get(i);
     }
 
-    void push(Map<Integer, Integer> map, int k, int v) {
+    void push(TreeMap<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -152,7 +163,7 @@ public class Solution {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(Map<Integer, Integer> map, int k, int v) {
+    void pull(TreeMap<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);
