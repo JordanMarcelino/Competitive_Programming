@@ -1,4 +1,4 @@
-package org.competitive.programming.code_league.juli_2022;
+package org.competitive.programming;
 
 // Start of user code (user defined imports)
 
@@ -8,69 +8,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class AyoBerhitung {
+public class Library {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
+    final long MOD = (long) (1e9 + 7);
+    final int MAX = Integer.MAX_VALUE;
+    final int MIN = Integer.MIN_VALUE;
 
-    public AyoBerhitung() {
+    public Library() {
     }
 
     void solve() throws IOException {
-        int n = i();
-        int[] arr = readArr(n);
-        int[] dp = new int[n + 1];
-
-        dp[0] = 0;
-        for (int i = 1; i <= n; i++) {
-            if (i == 1) dp[i] = dp[i-1] + arr[i-1];
-            else {
-                int j = 1, best = Integer.MIN_VALUE;
-
-                while(i - j >= 0 && j <= 5){
-                    best = Math.max(best, dp[i-j] + arr[i-1]);
-                    j++;
-                }
-
-                dp[i] = best;
-            }
-        }
-
-        out.println(dp[n]);
-
-//        int res = getResult(arr);
-//        out.println(res);
-    }
-
-    int getResult(int[] arr) {
-        int sum = 0;
-
-        int[] res = {
-                lompat(arr, 0, sum),
-                lompat(arr, 1, sum),
-                lompat(arr, 2, sum),
-                lompat(arr, 3, sum),
-                lompat(arr, 4, sum),
-        };
-
-        sort(res);
-        return res[res.length - 1];
-    }
-
-    int lompat(int[] arr, int pos, int sum) {
-        if (pos >= arr.length) return sum;
-
-        sum += arr[pos];
-        int[] res = {
-                lompat(arr, pos + 1, sum),
-                lompat(arr, pos + 2, sum),
-                lompat(arr, pos + 3, sum),
-                lompat(arr, pos + 4, sum),
-                lompat(arr, pos + 5, sum),
-        };
-
-        sort(res);
-        return res[res.length - 1];
     }
 
     void run() throws IOException {
@@ -85,7 +34,7 @@ public class AyoBerhitung {
     }
 
     public static void main(String[] args) throws IOException {
-        AyoBerhitung driver = new AyoBerhitung();
+        Library driver = new Library();
 
         driver.run();
         driver.closeResources();
@@ -159,31 +108,6 @@ public class AyoBerhitung {
         return (a * b) / gcd(a, b);
     }
 
-    <T> List<List<T>> permutations(T[] arr) {
-        List<List<T>> result = new ArrayList<>();
-
-        if (arr.length == 0) {
-            result.add(new ArrayList<T>());
-            return result;
-        }
-
-        T firstEl = arr[0];
-        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
-
-        for (var perm : permsWithoutFirst) {
-            for (int i = 0; i <= perm.size(); i++) {
-                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
-                permsWithFirst.add(firstEl);
-                permsWithFirst.addAll(perm.subList(i, perm.size()));
-
-                result.add(permsWithFirst);
-            }
-        }
-
-
-        return result;
-    }
-
     ArrayList<Integer> findDiv(int N) {
         //gens all divisors of N
         ArrayList<Integer> ls1 = new ArrayList<Integer>();
@@ -198,6 +122,57 @@ public class AyoBerhitung {
             if (b != ls1.get(ls1.size() - 1))
                 ls1.add(b);
         return ls1;
+    }
+
+    int binarySearch(int[] arr, int target){
+       int left = 0, right = arr.length - 1;
+       while(left <= right){
+           int mid = left + (right - left) / 2;
+           if(arr[mid] == target) return mid;
+
+           if(arr[mid] < target) left = mid + 1;
+           else right = mid - 1;
+       }
+
+       return -1;
+    }
+
+    int binarySearchClosestButSmaller(int[] arr, int left, int right, int target){
+        while(left != right){
+            int mid = left + (right - left) / 2;
+
+            if(arr[mid] == target) return mid;
+
+            if(arr[mid] < target) left = mid + 1;
+            else right = mid - 1;
+        }
+
+        return right;
+    }
+
+    int binarySearchClosest(int[] arr, int left, int right, int target){
+        while(left != right){
+            int mid = left + (right - left) / 2;
+
+            if(arr[mid] == target) return mid;
+
+            if(arr[mid] < target) left = mid + 1;
+            else right = mid;
+        }
+
+        return right;
+    }
+
+    long plusMod(long a, long b){
+        return ((a % MOD) + (b % MOD)) % MOD;
+    }
+
+    long minMod(long a, long b){
+        return ((a % MOD) - (b % MOD)) % MOD;
+    }
+
+    long multiplyMod(long a, long b){
+        return ((a % MOD) * (b % MOD)) % MOD;
     }
 
     void sort(int[] arr) {
@@ -222,7 +197,7 @@ public class AyoBerhitung {
             arr[i] = ls.get(i);
     }
 
-    void push(TreeMap<Integer, Integer> map, int k, int v) {
+    void push(Map<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -230,7 +205,7 @@ public class AyoBerhitung {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(TreeMap<Integer, Integer> map, int k, int v) {
+    void pull(Map<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

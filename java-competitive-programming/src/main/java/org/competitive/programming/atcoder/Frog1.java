@@ -1,4 +1,4 @@
-package org.competitive.programming.code_league.juli_2022;
+package org.competitive.programming.atcoder;
 
 // Start of user code (user defined imports)
 
@@ -6,71 +6,33 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
-public class AyoBerhitung {
+public class Frog1 {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
 
-    public AyoBerhitung() {
+    public Frog1() {
     }
 
     void solve() throws IOException {
         int n = i();
         int[] arr = readArr(n);
-        int[] dp = new int[n + 1];
 
+        int[] dp = new int[n];
         dp[0] = 0;
-        for (int i = 1; i <= n; i++) {
-            if (i == 1) dp[i] = dp[i-1] + arr[i-1];
-            else {
-                int j = 1, best = Integer.MIN_VALUE;
 
-                while(i - j >= 0 && j <= 5){
-                    best = Math.max(best, dp[i-j] + arr[i-1]);
-                    j++;
-                }
-
-                dp[i] = best;
-            }
+        for (int i = 1; i < n; i++) {
+            if (i == 1) dp[i] = Math.abs(arr[i] - arr[i-1]);
+            else if(i >= 2) dp[i] = Math.min(dp[i-1] + Math.abs(arr[i] - arr[i-1]),
+                    dp[i-2] + Math.abs(arr[i] - arr[i-2]));
         }
 
-        out.println(dp[n]);
-
-//        int res = getResult(arr);
-//        out.println(res);
-    }
-
-    int getResult(int[] arr) {
-        int sum = 0;
-
-        int[] res = {
-                lompat(arr, 0, sum),
-                lompat(arr, 1, sum),
-                lompat(arr, 2, sum),
-                lompat(arr, 3, sum),
-                lompat(arr, 4, sum),
-        };
-
-        sort(res);
-        return res[res.length - 1];
-    }
-
-    int lompat(int[] arr, int pos, int sum) {
-        if (pos >= arr.length) return sum;
-
-        sum += arr[pos];
-        int[] res = {
-                lompat(arr, pos + 1, sum),
-                lompat(arr, pos + 2, sum),
-                lompat(arr, pos + 3, sum),
-                lompat(arr, pos + 4, sum),
-                lompat(arr, pos + 5, sum),
-        };
-
-        sort(res);
-        return res[res.length - 1];
+        out.println(dp[n - 1]);
     }
 
     void run() throws IOException {
@@ -85,7 +47,7 @@ public class AyoBerhitung {
     }
 
     public static void main(String[] args) throws IOException {
-        AyoBerhitung driver = new AyoBerhitung();
+        Frog1 driver = new Frog1();
 
         driver.run();
         driver.closeResources();
@@ -159,31 +121,6 @@ public class AyoBerhitung {
         return (a * b) / gcd(a, b);
     }
 
-    <T> List<List<T>> permutations(T[] arr) {
-        List<List<T>> result = new ArrayList<>();
-
-        if (arr.length == 0) {
-            result.add(new ArrayList<T>());
-            return result;
-        }
-
-        T firstEl = arr[0];
-        List<List<T>> permsWithoutFirst = permutations(Arrays.copyOfRange(arr, 1, arr.length));
-
-        for (var perm : permsWithoutFirst) {
-            for (int i = 0; i <= perm.size(); i++) {
-                var permsWithFirst = new ArrayList<>(perm.subList(0, i));
-                permsWithFirst.add(firstEl);
-                permsWithFirst.addAll(perm.subList(i, perm.size()));
-
-                result.add(permsWithFirst);
-            }
-        }
-
-
-        return result;
-    }
-
     ArrayList<Integer> findDiv(int N) {
         //gens all divisors of N
         ArrayList<Integer> ls1 = new ArrayList<Integer>();
@@ -222,7 +159,7 @@ public class AyoBerhitung {
             arr[i] = ls.get(i);
     }
 
-    void push(TreeMap<Integer, Integer> map, int k, int v) {
+    void push(Map<Integer, Integer> map, int k, int v) {
         //map[k] += v;
         if (!map.containsKey(k))
             map.put(k, v);
@@ -230,7 +167,7 @@ public class AyoBerhitung {
             map.put(k, map.get(k) + v);
     }
 
-    void pull(TreeMap<Integer, Integer> map, int k, int v) {
+    void pull(Map<Integer, Integer> map, int k, int v) {
         //assumes map[k] >= v
         //map[k] -= v
         int lol = map.get(k);

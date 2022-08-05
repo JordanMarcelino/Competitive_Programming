@@ -1,4 +1,4 @@
-package org.competitive.programming;
+package org.competitive.programming.atcoder;
 
 // Start of user code (user defined imports)
 
@@ -7,21 +7,45 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
-public class Solution {
+public class HGrid1 {
 
     private final FastReader in = new FastReader();
     private final PrintWriter out = new PrintWriter(System.out);
     final long MOD = (long) (1e9 + 7);
-    final int MAX = Integer.MAX_VALUE;
-    final int MIN = Integer.MIN_VALUE;
+    long[][] dp;
 
-    public Solution() {
+    public HGrid1() {
     }
 
     void solve() throws IOException {
+        int h = i(), w = i();
+        char[][] path = new char[h+1][w+1];
+        dp = new long[h+1][w+1];
+
+        for (int i = 0; i < h; i++) {
+            String s = s();
+            for (int j = 0; j < w; j++) {
+                path[i][j] = s.charAt(j);
+            }
+        }
+
+        out.println(countPath(path, h-1, w-1));
+    }
+
+    long countPath(char[][] path, int row, int col){
+        if (row == 0 && col == 0) return 1;
+        if (dp[row][col] != 0) return dp[row][col];
+
+        long res = 0;
+        if (row - 1 >= 0 && path[row-1][col] != '#') res = ((res % MOD) + (countPath(path, row-1, col) % MOD)) % MOD;
+        if (col - 1 >= 0 && path[row][col-1] != '#') res = ((res % MOD) + (countPath(path, row, col-1) % MOD)) % MOD;
+
+        dp[row][col] = res;
+        return res;
     }
 
     void run() throws IOException {
@@ -36,7 +60,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        Solution driver = new Solution();
+        HGrid1 driver = new HGrid1();
 
         driver.run();
         driver.closeResources();
@@ -62,53 +86,6 @@ public class Solution {
         in.close();
         out.flush();
         out.close();
-    }
-
-    int[] readArr(int N) throws IOException {
-        int[] arr = new int[N];
-
-        for (int i = 0; i < N; i++)
-            arr[i] = i();
-
-        return arr;
-    }
-
-    long[] readArrLong(int N) throws IOException {
-        long[] arr = new long[N];
-
-        for (int i = 0; i < N; i++)
-            arr[i] = l();
-
-        return arr;
-    }
-
-    void print(int[] arr) {
-        //for debugging only
-        for (int x : arr)
-            out.print(x + " ");
-        out.println();
-    }
-
-    void sort(int[] arr) {
-        //because Arrays.sort() uses quicksort which is dumb
-        //Collections.sort() uses merge sort
-        ArrayList<Integer> ls = new ArrayList<Integer>();
-        for (int x : arr)
-            ls.add(x);
-        Collections.sort(ls);
-        for (int i = 0; i < arr.length; i++)
-            arr[i] = ls.get(i);
-    }
-
-    void sort(long[] arr) {
-        //because Arrays.sort() uses quicksort which is dumb
-        //Collections.sort() uses merge sort
-        ArrayList<Long> ls = new ArrayList<>();
-        for (long x : arr)
-            ls.add(x);
-        Collections.sort(ls);
-        for (int i = 0; i < arr.length; i++)
-            arr[i] = ls.get(i);
     }
 
     static class FastReader {
